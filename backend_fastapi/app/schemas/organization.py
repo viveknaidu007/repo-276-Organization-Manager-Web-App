@@ -1,6 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
 from datetime import datetime
+from uuid import UUID
 
 class OrganizationBase(BaseModel):
     name: str = Field(min_length=1, max_length=255)
@@ -14,7 +15,7 @@ class OrganizationUpdate(BaseModel):
     description: Optional[str] = Field(default=None, max_length=2000)
 
 class OrganizationOut(OrganizationBase):
-    id: str
+    id: UUID
     created_at: datetime
     owner_id: str
 

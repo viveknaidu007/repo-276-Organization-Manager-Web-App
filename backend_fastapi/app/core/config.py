@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import AnyHttpUrl
-from typing import List
+from typing import List, Union
 import os
 
 class Settings(BaseSettings):
@@ -11,7 +10,8 @@ class Settings(BaseSettings):
     DEBUG: bool = True
     PORT: int = 8000
 
-    CORS_ORIGINS: List[AnyHttpUrl] | List[str] = ['http://localhost:5173']
+    # Accept string (comma-separated) or list of strings from env
+    CORS_ORIGINS: Union[str, List[str]] = 'http://localhost:5173'
 
     DATABASE_URL: str
 

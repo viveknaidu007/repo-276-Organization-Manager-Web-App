@@ -22,8 +22,11 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(securit
             if user_id is None:
                 raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token: no sub")
             return AuthUser(user_id=user_id)
-        except JWTError as e:
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token") from e
+        except JWTError:
+            # In local DEBUG mode, fall back to accepting any non-empty token for demo
+            if settings.DEBUG:
+                return AuthUser(user_id=token)
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
     # Fallback: accept any non-empty token and treat token itself as user id (for local demo)
     if not token:
